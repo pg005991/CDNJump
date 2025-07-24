@@ -28,6 +28,7 @@ CDN-Jump analiza dominios para identificar cuando un atacante puede acceder dire
 - **Búsqueda de certificados** via Censys API
 - **Validación de contenido** HTTP/HTTPS
 - **Detección automática** de CDNs
+- **📝 Sistema de logging avanzado** con archivos separados por dominio
 
 ### 🎛️ Múltiples Modos de Operación
 
@@ -49,6 +50,14 @@ Utiliza **tres técnicas** para identificar CDNs:
 - Akamai, Cloudflare, CloudFront
 - Fastly, Imperva, KeyCDN
 - StackPath, CDN77, BunnyCDN
+
+### 📝 Sistema de Logging Avanzado
+
+- **Archivos separados por dominio** con timestamp único
+- **Formato estructurado** con secciones organizadas
+- **Información detallada** de cada etapa del análisis
+- **Resumen estadístico** final con métricas
+- **Compatibilidad** con análisis individual y múltiples dominios
 
 ## 🚀 Instalación
 
@@ -138,49 +147,122 @@ cdns:
 
 ```bash
 # Analizar un dominio único
-python -m cdnjump.cli -d ejemplo.com
+poetry run python -m cdnjump.cli -d ejemplo.com
 
 # Modo interactivo
-python -m cdnjump.cli --interactive
+poetry run python -m cdnjump.cli --interactive
 
 # Analizar múltiples dominios desde archivo
-python -m cdnjump.cli -f dominios.txt
+poetry run python -m cdnjump.cli -f dominios.txt
 
 # Modo verbose para más detalles
-python -m cdnjump.cli -d ejemplo.com -v
+poetry run python -m cdnjump.cli -d ejemplo.com -v
+```
+
+### 📝 Sistema de Logging
+
+Cada análisis genera un archivo de log independiente en la carpeta `results/`:
+
+```bash
+# Estructura de archivos generados
+results/
+├── ejemplo.com_20250724_143021.log
+├── google.com_20250724_143025.log
+└── github.com_20250724_143030.log
+```
+
+**Formato del archivo de log:**
+```log
+[2025-07-24 14:30:21] cdnjump.ejemplo.com - INFO: 
+============================================================
+           CDN-Jump: Escaneo de ejemplo.com
+============================================================
+Fecha de inicio: 2025-07-24 14:30:21
+Archivo de log: /path/to/results/ejemplo.com_20250724_143021.log
+============================================================
+
+[2025-07-24 14:30:21] cdnjump.ejemplo.com - INFO: 📡 REGISTROS DNS OBTENIDOS:
+[2025-07-24 14:30:21] cdnjump.ejemplo.com - INFO:    Dominio: ejemplo.com
+[2025-07-24 14:30:21] cdnjump.ejemplo.com - INFO:    Registros A: ['192.168.1.1', '192.168.1.2']
+[2025-07-24 14:30:21] cdnjump.ejemplo.com - INFO:    Total de IPs: 2
+[2025-07-24 14:30:21] cdnjump.ejemplo.com - INFO: ----------------------------------------
+
+[2025-07-24 14:30:22] cdnjump.ejemplo.com - INFO: 🔍 RESULTADOS VIRUSTOTAL:
+[2025-07-24 14:30:22] cdnjump.ejemplo.com - INFO:    Modo: Básico
+[2025-07-24 14:30:22] cdnjump.ejemplo.com - INFO:    IPs históricas: ['192.168.1.1', '192.168.1.2', '10.0.0.1']
+[2025-07-24 14:30:22] cdnjump.ejemplo.com - INFO:    Total de IPs: 3
+[2025-07-24 14:30:22] cdnjump.ejemplo.com - INFO: ----------------------------------------
+
+[2025-07-24 14:30:23] cdnjump.ejemplo.com - INFO: 🔄 RESULTADOS COMBINADOS:
+[2025-07-24 14:30:23] cdnjump.ejemplo.com - INFO:    IPs únicas a validar: ['10.0.0.1', '192.168.1.1', '192.168.1.2']
+[2025-07-24 14:30:23] cdnjump.ejemplo.com - INFO:    Total de IPs: 3
+[2025-07-24 14:30:23] cdnjump.ejemplo.com - INFO: ----------------------------------------
+
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO: 🛡️ RESULTADOS DETECCIÓN CDN:
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO:    🔄 192.168.1.1: cloudflare
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO:    🔄 192.168.1.2: cloudflare
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO:    ✅ 10.0.0.1: Potential CDN bypass
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO: ----------------------------------------
+
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO: 📊 RESUMEN DEL ANÁLISIS:
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO:    Dominio analizado: ejemplo.com
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO:    Total de IPs analizadas: 3
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO:    IPs con CDN detectado: 2
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO:    IPs potencial bypass: 1
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO:    Archivo de resultados: /path/to/results/ejemplo.com_20250724_143021.log
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO:    Fecha de finalización: 2025-07-24 14:30:24
+[2025-07-24 14:30:24] cdnjump.ejemplo.com - INFO: ============================================================
 ```
 
 ### Modos de Escaneo
 
 ```bash
 # Modo básico (por defecto)
-python -m cdnjump.cli -d ejemplo.com
+poetry run python -m cdnjump.cli -d ejemplo.com
 
 # Modo intensivo (incluye AS owner)
-python -m cdnjump.cli -d ejemplo.com --intensive
+poetry run python -m cdnjump.cli -d ejemplo.com --intensive
 
 # Modo Censys (búsqueda en certificados)
-python -m cdnjump.cli -d ejemplo.com --censys
+poetry run python -m cdnjump.cli -d ejemplo.com --censys
 
 # Modo completo (intensivo + Censys)
-python -m cdnjump.cli -d ejemplo.com --intensive --censys
+poetry run python -m cdnjump.cli -d ejemplo.com --intensive --censys
 ```
 
 ### Ejemplos de Uso
 
 ```bash
 # Análisis básico de un dominio
-python -m cdnjump.cli -d google.com
+poetry run python -m cdnjump.cli -d google.com
 
 # Análisis intensivo con verbose
-python -m cdnjump.cli -d github.com --intensive -v
+poetry run python -m cdnjump.cli -d github.com --intensive -v
 
 # Procesar lista de dominios
 echo "google.com\ngithub.com\nstackoverflow.com" > dominios.txt
-python -m cdnjump.cli -f dominios.txt --censys
+poetry run python -m cdnjump.cli -f dominios.txt --censys
 
 # Modo interactivo para explorar opciones
-python -m cdnjump.cli --interactive
+poetry run python -m cdnjump.cli --interactive
+```
+
+### 📁 Gestión de Resultados
+
+Los archivos de log se almacenan automáticamente en la carpeta `results/`:
+
+```bash
+# Ver archivos de log generados
+ls -la results/
+
+# Ver contenido de un log específico
+cat results/ejemplo.com_20250724_143021.log
+
+# Buscar logs por dominio
+find results/ -name "*google.com*" -type f
+
+# Ver logs recientes
+ls -lt results/ | head -10
 ```
 
 ## 📊 Interpretación de Resultados
@@ -188,23 +270,62 @@ python -m cdnjump.cli --interactive
 ### Salida Típica
 
 ```
-[14:30:15] INFO: Iniciando análisis para: ejemplo.com
-[14:30:15] INFO: Registros DNS obtenidos: ['192.168.1.1', '192.168.1.2']
-[14:30:16] INFO: Modo básico VT: ['192.168.1.1', '192.168.1.2', '10.0.0.1']
-[14:30:17] INFO: Resultados Censys: ['10.0.0.2', '10.0.0.3']
-[14:30:18] INFO: IP finales a validar: ['10.0.0.1', '10.0.0.2', '10.0.0.3', '192.168.1.1', '192.168.1.2']
-[14:30:19] INFO: 192.168.1.1: cloudflare
-[14:30:19] INFO: 192.168.1.2: cloudflare
-[14:30:20] INFO: 10.0.0.1: Potential CDN bypass
-[14:30:20] INFO: 10.0.0.2: akamai
-[14:30:20] INFO: 10.0.0.3: Potential CDN bypass
+[14:30:15] INFO: 📁 Directorio de resultados: /path/to/results
+[14:30:15] INFO: 
+============================================================
+           CDN-Jump: Escaneo de ejemplo.com
+============================================================
+Fecha de inicio: 2025-07-24 14:30:15
+Archivo de log: /path/to/results/ejemplo.com_20250724_143015.log
+============================================================
+
+[14:30:15] INFO: 📡 REGISTROS DNS OBTENIDOS:
+[14:30:15] INFO:    Dominio: ejemplo.com
+[14:30:15] INFO:    Registros A: ['192.168.1.1', '192.168.1.2']
+[14:30:15] INFO:    Total de IPs: 2
+[14:30:15] INFO: ----------------------------------------
+
+[14:30:16] INFO: 🔍 RESULTADOS VIRUSTOTAL:
+[14:30:16] INFO:    Modo: Básico
+[14:30:16] INFO:    IPs históricas: ['192.168.1.1', '192.168.1.2', '10.0.0.1']
+[14:30:16] INFO:    Total de IPs: 3
+[14:30:16] INFO: ----------------------------------------
+
+[14:30:17] INFO: 🔄 RESULTADOS COMBINADOS:
+[14:30:17] INFO:    IPs únicas a validar: ['10.0.0.1', '192.168.1.1', '192.168.1.2']
+[14:30:17] INFO:    Total de IPs: 3
+[14:30:17] INFO: ----------------------------------------
+
+[14:30:18] INFO: 🛡️ RESULTADOS DETECCIÓN CDN:
+[14:30:18] INFO:    🔄 192.168.1.1: cloudflare
+[14:30:18] INFO:    🔄 192.168.1.2: cloudflare
+[14:30:18] INFO:    ✅ 10.0.0.1: Potential CDN bypass
+[14:30:18] INFO: ----------------------------------------
+
+[14:30:19] INFO: 📊 RESUMEN DEL ANÁLISIS:
+[14:30:19] INFO:    Dominio analizado: ejemplo.com
+[14:30:19] INFO:    Total de IPs analizadas: 3
+[14:30:19] INFO:    IPs con CDN detectado: 2
+[14:30:19] INFO:    IPs potencial bypass: 1
+[14:30:19] INFO:    Archivo de resultados: /path/to/results/ejemplo.com_20250724_143015.log
+[14:30:19] INFO:    Fecha de finalización: 2025-07-24 14:30:19
+[14:30:19] INFO: ============================================================
+[14:30:19] INFO: ✅ Análisis completado para ejemplo.com
+[14:30:19] INFO: 📄 Log guardado en: /path/to/results/ejemplo.com_20250724_143015.log
 ```
 
 ### Interpretación
 
-- **`cloudflare`**: IP pertenece a Cloudflare CDN ✅
-- **`akamai`**: IP pertenece a Akamai CDN ✅
-- **`Potential CDN bypass`**: ⚠️ **Posible bypass** - IP no identificada como CDN
+- **🔄 `cloudflare`**: IP pertenece a Cloudflare CDN ✅
+- **🔄 `akamai`**: IP pertenece a Akamai CDN ✅
+- **✅ `Potential CDN bypass`**: ⚠️ **Posible bypass** - IP no identificada como CDN
+
+### 📈 Métricas del Resumen
+
+- **Total de IPs analizadas**: Número total de IPs procesadas
+- **IPs con CDN detectado**: IPs identificadas como pertenecientes a CDNs
+- **IPs potencial bypass**: IPs que podrían permitir bypass de CDN
+- **Archivo de resultados**: Ruta del archivo de log generado
 
 ## 🏗️ Estructura del Proyecto
 
@@ -220,7 +341,7 @@ CDNJump/
 │   │   └── censys.py           # Censys API
 │   ├── validation.py           # Validación de contenido
 │   ├── cdn.py                  # Detección de CDNs
-│   └── logger.py               # Sistema de logging
+│   └── logger.py               # Sistema de logging avanzado
 ├── config/                     # Configuración
 │   └── settings.yaml
 ├── tests/                      # Tests unitarios
@@ -228,7 +349,7 @@ CDNJump/
 │   ├── test_dns.py
 │   ├── test_validation.py
 │   └── test_cdn.py
-├── results/                    # Resultados de análisis
+├── results/                    # Resultados de análisis (archivos de log)
 ├── scans/                      # Escaneos por dominio
 ├── pyproject.toml              # Configuración Poetry
 └── README.md                   # Este archivo
@@ -303,12 +424,14 @@ tests/
 
 ### Próximas Características
 
+- [x] ✅ Sistema de logging avanzado con archivos separados por dominio
 - [ ] Dashboard web para resultados
 - [ ] Alertas automáticas por email
 - [ ] Integración con más APIs de seguridad
 - [ ] Análisis de tendencias temporales
 - [ ] Soporte para más proveedores de CDN
 - [ ] Exportación a formatos JSON/CSV
+- [ ] Compresión y rotación automática de logs
 
 ### Mejoras Técnicas
 
@@ -317,6 +440,7 @@ tests/
 - [ ] Mejora en gestión de errores
 - [ ] Optimización de rendimiento
 - [ ] Documentación de API
+- [ ] Rate limiting para APIs externas
 
 ## 🤝 Contribuir
 
