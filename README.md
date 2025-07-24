@@ -470,8 +470,6 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ## 📞 Soporte
 
-- **Issues**: [GitHub Issues](https://github.com/tu-usuario/CDNJump/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/tu-usuario/CDNJump/discussions)
 - **Email**: <goalnefesh@protonmail.com>
 
 ---
