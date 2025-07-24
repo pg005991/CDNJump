@@ -461,12 +461,6 @@ tests/
 
 Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
 
-## 🙏 Agradecimientos
-
-- **VirusTotal** por proporcionar acceso a su API
-- **Censys** por su API de búsqueda de certificados
-- **dnspython** por la librería de consultas DNS
-- **BeautifulSoup** por el parsing de HTML
 
 ## 📞 Soporte
 
