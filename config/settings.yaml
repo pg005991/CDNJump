@@ -1,0 +1,15 @@
+virustotal:
+  api_key: "TU_VIRUSTOTAL_API_KEY"
+
+censys:
+  api_id: "TU_CENSYS_API_ID"
+  api_secret: "TU_CENSYS_API_SECRET"
+  domain_api: "api.censys.io"
+  url_api: "https://censys.io"
+
+cdns:
+  - akamai
+  - cloudfront
+  - cloudflare
+  - fastly
+  - imperva
