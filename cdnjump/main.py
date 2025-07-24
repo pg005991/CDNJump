@@ -56,36 +56,36 @@ def process_domain(domain, scans_dir, results_dir, intensive, censys, virustotal
     domain_logger.log_banner(domain)
     
     try:
-        # Consulta DNS: se obtiene la lista de registros A
-        dns_records = get_dns_a_records(domain)
+    # Consulta DNS: se obtiene la lista de registros A
+    dns_records = get_dns_a_records(domain)
         domain_logger.log_dns_results(dns_records)
-        
-        # Consulta VirusTotal (modo intensivo vs. básico)
-        if intensive:
-            vt_ips = vt_get_dns_history(domain)
-            vt_certs = vt_get_certificates_history(domain)
+    
+    # Consulta VirusTotal (modo intensivo vs. básico)
+    if intensive:
+        vt_ips = vt_get_dns_history(domain)
+        vt_certs = vt_get_certificates_history(domain)
             domain_logger.log_virustotal_results(vt_ips, vt_certs, intensive=True)
-            ip_list = list(set(vt_ips))  # Aquí se podría combinar con resultados de certificados
-        else:
-            vt_ips = vt_get_dns_history(domain)
+        ip_list = list(set(vt_ips))  # Aquí se podría combinar con resultados de certificados
+    else:
+        vt_ips = vt_get_dns_history(domain)
             domain_logger.log_virustotal_results(vt_ips, intensive=False)
-            ip_list = vt_ips
+        ip_list = vt_ips
 
-        # Si se activa Censys, combinar resultados de ambas fuentes
-        if censys:
-            censys_ips = censys_search_ip_by_certificates(domain)
+    # Si se activa Censys, combinar resultados de ambas fuentes
+    if censys:
+        censys_ips = censys_search_ip_by_certificates(domain)
             domain_logger.log_censys_results(censys_ips)
-            ip_list = list(set(ip_list + censys_ips))
-        
-        # Aquí se pueden incluir validaciones adicionales de contenido, etc.
-        
-        ip_list = sorted(set(ip_list))
+        ip_list = list(set(ip_list + censys_ips))
+    
+    # Aquí se pueden incluir validaciones adicionales de contenido, etc.
+    
+    ip_list = sorted(set(ip_list))
         domain_logger.log_combined_results(ip_list)
-        
-        # Validación de CDNs: se obtiene un diccionario con la detección para cada IP.
-        cdn_results = cdn_validation(ip_list, domain)
+    
+    # Validación de CDNs: se obtiene un diccionario con la detección para cada IP.
+    cdn_results = cdn_validation(ip_list, domain)
         domain_logger.log_cdn_results(cdn_results)
-        
+    
         # Registrar resumen final
         domain_logger.log_summary(cdn_results)
         
