@@ -73,6 +73,33 @@ def censys_search_certificates(domain: str, limit: int = 50) -> list:
             raise
     return fingerprints
 
+def censys_search_ip_by_certificates(domain: str, limit: int = 50) -> list:
+    """
+    Realiza una búsqueda de IPs en la API de Censys basada en certificados del dominio.
+    
+    Esta función busca certificados relacionados con el dominio y extrae las IPs
+    asociadas a esos certificados.
+    
+    Parámetros:
+      - domain (str): Dominio a buscar.
+      - limit (int): Número de resultados por petición (por defecto 50).
+      
+    Retorna:
+      - list: Lista de direcciones IP extraídas de los certificados.
+    """
+    # Primero obtenemos los certificados
+    certificates = censys_search_certificates(domain, limit)
+    
+    # Por ahora, como no tenemos una función para extraer IPs directamente
+    # de los certificados, retornamos una lista vacía
+    # En una implementación completa, aquí se buscarían las IPs asociadas
+    # a los certificados encontrados
+    
+    logger.info(f"Certificados encontrados para {domain}: {len(certificates)}")
+    logger.warning("Extracción de IPs desde certificados no implementada completamente")
+    
+    return []  # Placeholder - en implementación real extraería IPs de certificados
+
 # Ejemplo de uso (para pruebas locales)
 if __name__ == "__main__":
     import sys

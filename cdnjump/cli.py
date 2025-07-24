@@ -20,7 +20,7 @@ procesar un fichero con varios dominios.
 """
 
 import click
-from main import main_logic
+from .main import main_logic
 
 @click.command()
 @click.option(
