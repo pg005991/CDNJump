@@ -1,10 +1,14 @@
-# CDN-Jump 🔍
-
-[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Poetry](https://img.shields.io/badge/Poetry-1.4+-orange.svg)](https://python-poetry.org/)
-
-**CDN-Jump** es una herramienta avanzada de análisis de seguridad diseñada para **detectar posibles bypasses** en servicios de Content Delivery Network (CDN). Combina consultas en tiempo real con análisis históricos para proporcionar una visión completa de la infraestructura de dominios.
+<div align="center">
+  <img src="images/cdnjump-logo 05.png" alt="CDNJump Logo" width="400"/>
+  
+  # CDN-Jump 🔍
+  
+  [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
+  [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+  [![Poetry](https://img.shields.io/badge/Poetry-1.4+-orange.svg)](https://python-poetry.org/)
+  
+  **CDN-Jump** es una herramienta avanzada de análisis de seguridad diseñada para **detectar posibles bypasses** en servicios de Content Delivery Network (CDN). Combina consultas en tiempo real con análisis históricos para proporcionar una visión completa de la infraestructura de dominios.
+</div>
 
 ## 🎯 ¿Qué hace CDN-Jump?
 
